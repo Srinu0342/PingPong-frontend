@@ -95,7 +95,6 @@ function MatchRecord(props){
       <h4>{player2}</h4>
       <button onClick={()=>setScore2(score2+1)}>ADD WIN</button>
       <p>wins: </p><h6>{score2}</h6>
-      <h1>-------------------------------------</h1>
       <p>CURRENT WINNER : </p>
       <div>{
       (score1==score2)?'TIE':
