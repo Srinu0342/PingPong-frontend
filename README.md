@@ -1,5 +1,7 @@
 ### USAGE INSTRUCTIONS :
 
+** Run npm start to run the frontend
+
 1. ENTER TWO PLAYER NAMES THAT.
 
 2. If a game between them already exists the score will start from that.
