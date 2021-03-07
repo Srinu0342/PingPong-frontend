@@ -42,12 +42,12 @@ function SetUp(){
   }
   else{
   return(
-    <form  onSubmit={handleSubmit}>
-        <label htmlFor='player1'>PLAYER1</label>
+    <form  onSubmit={handleSubmit} className = 'setUp'>
+        <label htmlFor='player1' className = 'label'>PLAYER 1</label>
         <input id='player1' type='text' placeholder='ENTER PLAYER1' onChange={e=>setPlayer1(e.target.value)}/>
-        <label htmlFor='player2'>PLAYER1</label>
+        <label htmlFor='player2' className = 'label'>PLAYER 2</label>
         <input id='player2' type='text' placeholder='ENTER PLAYER2' onChange={e=>setPlayer2(e.target.value)}/>
-        <button>START GAME</button>
+        <button className = 'button'>START GAME</button>
       </form>
   );}
 }
@@ -88,22 +88,38 @@ function MatchRecord(props){
     return <Redirect to = '/' />
   } else {
   return(
-    <div>
-      <h4>{player1}</h4>
-      <button onClick={()=>setScore1(score1+1)}>ADD WIN</button>
-      <p>wins: </p><h6>{score1}</h6>
-      <h4>{player2}</h4>
-      <button onClick={()=>setScore2(score2+1)}>ADD WIN</button>
-      <p>wins: </p><h6>{score2}</h6>
-      <p>CURRENT WINNER : </p>
-      <div>{
-      (score1==score2)?'TIE':
-      ((score1>score2)?
-      (<div><p>{player1}</p><p>win difference: {score1-score2}</p></div>)
-      :(<div><p>{player2}</p><p>win difference: {score2-score1}</p></div>)
-      )}</div>
-      <button onClick={saveData}>SAVE GAME</button>
-      <button onClick={handleExit}>EXIT GAME</button>
+    <div className = 'gamebox'>
+      <div className = 'box'>
+        <p className = 'player'>{player1}</p>
+        <button onClick={()=>setScore1(score1+1)} className = 'button1'>ADD WIN</button>
+      </div>  
+      <div className = 'box'>
+        <p className = 'stat'>wins  : </p><p className = 'value'>{score1}</p>
+      </div>  
+      <div className = 'box'>
+        <p className = 'player'>{player2}</p>
+        <button onClick={()=>setScore2(score2+1)} className = 'button1'>ADD WIN</button>
+      </div>
+      <div className = 'box'>
+        <p className = 'stat'>wins  : </p><p className = 'value'>{score2}</p>
+      </div>  
+      <div className = 'result'>
+        <div className = 'winner'>
+          <p>CURRENT WINNER : </p>
+          {
+          (score1==score2)?(<p>TIE</p>):
+          ((score1>score2)?
+          (<p>{player1}</p>)
+          :(<p>{player2}</p>))
+          }
+        </div>
+        <div className = 'winner'> 
+          <p>win difference : </p>
+          <p>{Math.abs(score1-score2)}</p>
+        </div>
+      </div>
+      <button onClick={saveData} className = 'button'>SAVE GAME</button>
+      <button onClick={handleExit} className = 'button'>EXIT GAME</button>
     </div>
   );
 }
@@ -117,7 +133,7 @@ function App() {
   var setPlayers = [setPlayer1, setPlayer2];
 
   return (
-    <div>
+    <div className = 'App'>
       <matchContext.Provider value={{players, setPlayers}}>
       <Router>
         <Switch>
