@@ -22,6 +22,13 @@ function SetUp(){
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if(player1 == player2){
+      alert('both players can not be same');
+      document.getElementById('player1').value = '';
+      document.getElementById('player2').value = '';
+      return 0;
+    }
 
     document.getElementById('player1').value = '';
     document.getElementById('player2').value = '';
