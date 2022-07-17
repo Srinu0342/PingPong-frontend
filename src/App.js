@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import './App.css';
-import React,{ useState, createContext, useContext } from "react";
+import React,{ useState, createContext, useContext, useMemo } from "react";
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import Axios from 'axios';
 
 const matchContext = createContext();
 
-function SetUp(){
+function SetUp({ baseURL }){
 
   const context = useContext(matchContext);
 
@@ -14,11 +14,11 @@ function SetUp(){
 
   const [payload, setPayload] = useState();
 
-  var player1 = context.players[0];
-  var player2 = context.players[1];
+  let player1 = context.players[0];
+  let player2 = context.players[1];
 
-  var setPlayer1 = context.setPlayers[0];
-  var setPlayer2 = context.setPlayers[1];
+  let setPlayer1 = context.setPlayers[0];
+  let setPlayer2 = context.setPlayers[1];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,7 +34,7 @@ function SetUp(){
     document.getElementById('player2').value = '';
 
     try {
-      var Res = await Axios.post('http://localhost:8000/matchsetup', {player1:player1 , player2:player2});
+      let Res = await Axios.post(`${baseURL}/matchsetup`, {player1:player1 , player2:player2});
       setPayload(Res.data);
     }catch (e) {
       console.log(e);
@@ -63,10 +63,12 @@ function MatchRecord(props){
 
   const context = useContext(matchContext);
 
-  var player1 = context.players[0];
-  var player2 = context.players[1];
+  let player1 = context.players[0];
+  let player2 = context.players[1];
 
-  var score = props.location.state;
+  let score = props.location.state;
+
+  const baseURL = useMemo(() => process.env.REACT_APP_BASE_URL, []);
 
   const [redirect, setRedirect] = useState(false);
 
@@ -75,11 +77,9 @@ function MatchRecord(props){
 
   async function saveData(){
 
-    var requestBody = {player1:{name: player1, score: score1}, player2: {name: player2, score: score2}};
-    // var x = await (await fetch('http://localhost:8000/')).json();
+    let requestBody = {player1:{name: player1, score: score1}, player2: {name: player2, score: score2}};
     try {
-      var x = await Axios.post('http://localhost:8000/game', requestBody);
-    console.log(x.data);
+    await Axios.post(`${baseURL}/game`, requestBody);
   }catch (e) {
     console.log(e);
   }
@@ -136,16 +136,18 @@ function App() {
   const [player1, setPlayer1] = useState(null);
   const [player2, setPlayer2] = useState(null);
 
-  var players = [player1, player2];
-  var setPlayers = [setPlayer1, setPlayer2];
+  const baseURL = useMemo(() => process.env.REACT_APP_BASE_URL, []);
+
+  let players = [player1, player2];
+  let setPlayers = [setPlayer1, setPlayer2];
 
   return (
     <div className = 'App'>
       <matchContext.Provider value={{players, setPlayers}}>
       <Router>
         <Switch>
-          <Route exact path='/'><SetUp /></Route>
-          <Route exact path='/match_setup'><SetUp /></Route>
+          <Route exact path='/'><SetUp baseURL={baseURL}/></Route>
+          <Route exact path='/match_setup'><SetUp baseURL={baseURL}/></Route>
           <Route exact path={'/'+player1+'vs'+player2} component={MatchRecord}/>
           <Route exact path = '*' component={Error} />
         </Switch>
